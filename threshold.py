@@ -10,8 +10,13 @@ if not cap.isOpened():
 	exit()
 	
 thresholdValue = 127
+recordedSkinColor = (100, 100, 100)
 skinLowerBound = (87, 68, 71)
 skinUpperBound = (191, 119, 128)
+
+def calibrate_skin(img, x, y, left, right):
+	img_crop = img[x:x+left, y:y+right]
+	
 
 while True:
 	# Capture frame by frame
@@ -22,9 +27,9 @@ while True:
 		print("Cannot receive frame (stream end?) Exiting...")
 		break
 
-	gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
+	ycrcb = cv.cvtColor(frame, cv.COLOR_BGR2YCrCb)
 	blur = cv.blur(gray, (3, 3))
-	ret, blur_thresh = cv.threshold(blur, 30, 255, cv.THRESH_BINARY)
+	ret, blur_thresh = cv.inRange(blur, )
 	contours, hierachy = cv.findContours(blur_thresh, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
 
 	contourImg = frame.copy()
