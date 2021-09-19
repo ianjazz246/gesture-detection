@@ -11,7 +11,9 @@ from tensorflow.keras.layers import Dense, Dropout
 from tensorflow.keras import optimizers
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+from scipy.spatial import distance
 from matplotlib import pyplot as plt
+import ast
 
 MEDIAPIPE_DIR = "mediapipe"
 NUM_LANDMARKS = 21
@@ -29,8 +31,8 @@ for i, gesture in enumerate(GESTURE_CATEGORIES):
 			if addedRows >= 500:
 				break
 			row_out = []
-			for j in range(0, len(row), 3):
-				row_out.append([float(x) for x in row[j : j + 3]])
+			for point_list_str in row:
+				row_out.append(ast.literal_eval(point_list_str))
 			hand_coordinates.append(row_out)
 			y.append(i)
 			addedRows += 1
@@ -40,8 +42,12 @@ X = []
 
 # Get distance between every landmark
 for hand in hand_coordinates:
+	# Distance from wrist point to base of index finger
+	wrist_to_index_base_dist = distance.euclidean(hand[0], hand[5])
 	# linalg.norm is euclidiean distance
-	X.append([np.linalg.norm(b - a) for a, b in itertools.combinations(hand, 2)])
+	# Scale all distance relative to distance between wrist and index finger base
+	X.append([np.linalg.norm(b - a) / wrist_to_index_base_dist for a, b in itertools.combinations(hand, 2)])
+	
 
 X = np.array(X)
 y = np.array(y)
@@ -58,7 +64,7 @@ model = Sequential()
 
 model.add(Dense(100, activation="relu", input_shape=(math.comb(NUM_LANDMARKS, 2),)))
 model.add(Dense(25, activation="relu"))
-model.add(Dense(4, activation="softmax"))
+model.add(Dense(len(GESTURE_CATEGORIES), activation="softmax"))
 
 print(model.summary())
 
@@ -67,9 +73,14 @@ model.compile(loss="categorical_crossentropy", optimizer=optimizer, metrics=["ac
 
 callbacks = [
     keras.callbacks.ModelCheckpoint(
-        filepath='mediapipe/best.h5',
+        filepath="mediapipe/7_gestures_best.h5",
 				save_best_only = True,
 				monitor="val_loss",
+		),
+		keras.callbacks.EarlyStopping(
+			monitor="val_loss",
+			patience = 3,
+			restore_best_weights = True
 		)
 ]
 

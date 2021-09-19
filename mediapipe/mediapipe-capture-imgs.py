@@ -8,7 +8,7 @@ mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_hands = mp.solutions.hands
 
-OUTPUT_ROOT_DIR = r"C:\Users\iansw\source\repos\gesture-detection\mediapipe"
+OUTPUT_ROOT_DIR = r"mediapipe"
 
 # For images, but not used
 currentFileNum = 1
@@ -61,15 +61,16 @@ def on_slider_change(new_value):
 	currentFileNum = get_next_filenames() + 1
 	rows_added = get_csv_rows()
 
+
+create_folders()
+currentFileNum = get_next_filenames() + 1
+rows_added = get_csv_rows()
+
 csv_file = open(
 	os.path.join(OUTPUT_ROOT_DIR, GESTURE_CATEGORIES[selectedGestureI], GESTURE_CATEGORIES[selectedGestureI] + ".csv"),
 	mode="a+", newline=""
 )
 writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-
-create_folders()
-currentFileNum = get_next_filenames() + 1
-rows_added = get_csv_rows()
 
 cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 cv2.namedWindow("MediaPipe Hands")
