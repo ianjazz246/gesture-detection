@@ -28,7 +28,7 @@ for i, gesture in enumerate(GESTURE_CATEGORIES):
 		reader = csv.reader(csv_file, delimiter=',', quotechar='"')
 		addedRows = 0
 		for row in reader:
-			if addedRows >= 500:
+			if addedRows >= 700:
 				break
 			row_out = []
 			for point_list_str in row:
@@ -73,7 +73,7 @@ model.compile(loss="categorical_crossentropy", optimizer=optimizer, metrics=["ac
 
 callbacks = [
     keras.callbacks.ModelCheckpoint(
-        filepath="mediapipe/7_gestures_best.h5",
+        filepath="mediapipe/8_gestures_best.h5",
 				save_best_only = True,
 				monitor="val_loss",
 		),

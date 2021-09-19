@@ -9,7 +9,7 @@ mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 mp_hands = mp.solutions.hands
 
-MODEL_FILE_PATH = "mediapipe/7_gestures_best.h5"
+MODEL_FILE_PATH = "mediapipe/8_gestures_best.h5"
 
 PREDICTION_MIN_CONFIDENCE = 0.4
 
