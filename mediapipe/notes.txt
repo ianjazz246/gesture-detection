@@ -1,0 +1,3 @@
+8_gesutres_smaller_best.h5 is a model with 70, 20, 8 layers, 16385 parameters. val_loss: 0.0662 - val_accuracy: 0.9857
+
+8_gesutres_smaller2_best.h5 is deeper but narrower. 50, 50, 15, 8, 13,993 parameters, loss = 0.07716404
